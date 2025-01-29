@@ -1,0 +1,53 @@
+.card {
+  position: relative;
+  padding: 1.5rem;
+  border-radius: 12px;
+  background: linear-gradient(
+    var(--gradient-angle, 45deg),
+    rgba(255, 255, 255, 0.05),
+    rgba(255, 255, 255, 0.1)
+  );
+  backdrop-filter: blur(10px);
+  transform-style: preserve-3d;
+  transition: transform 0.3s ease;
+  contain: layout;
+}
+
+.card:hover {
+  transform: translateY(-2px) rotateX(2deg) rotateY(2deg);
+}
+
+.title {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.value {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.change {
+  font-size: 0.875rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.positive {
+  color: var(--success);
+}
+
+.negative {
+  color: var(--error);
+}
+
+.timeframe {
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+  margin-top: 0.5rem;
+}
