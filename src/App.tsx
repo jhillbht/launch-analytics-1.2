@@ -1,126 +1,115 @@
-import React from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, BarChart, Bar } from 'recharts';
-import { ArrowUpRight, ArrowDownRight, Users, ArrowRight } from 'lucide-react';
+import React, { useState } from 'react';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { Mic, User2, BarChart3 } from 'lucide-react';
 
-// Sample data - replace with your actual data
 const data = [
-  { month: 'Jan', users: 4000, engagementRate: 70 },
-  { month: 'Feb', users: 4500, engagementRate: 75 },
-  { month: 'Mar', users: 5000, engagementRate: 72 },
-  { month: 'Apr', users: 4800, engagementRate: 78 },
-  { month: 'May', users: 5500, engagementRate: 80 },
-  { month: 'Jun', users: 6000, engagementRate: 82 },
+  { name: 'Jan', Users: 4000, 'Call Volume': 2400, 'User Retention': 2400 },
+  { name: 'Feb', Users: 3000, 'Call Volume': 1398, 'User Retention': 2210 },
+  { name: 'Mar', Users: 2000, 'Call Volume': 9800, 'User Retention': 2290 },
+  { name: 'Apr', Users: 2780, 'Call Volume': 3908, 'User Retention': 2000 },
+  { name: 'May', Users: 1890, 'Call Volume': 4800, 'User Retention': 2181 },
+  { name: 'Jun', Users: 2390, 'Call Volume': 3800, 'User Retention': 2500 },
+  { name: 'Jul', Users: 3490, 'Call Volume': 4300, 'User Retention': 2100 },
 ];
 
-const dailyVisits = [
-  { day: 'Mon', visits: 2400 },
-  { day: 'Tue', visits: 1398 },
-  { day: 'Wed', visits: 9800 },
-  { day: 'Thu', visits: 3908 },
-  { day: 'Fri', visits: 4800 },
-  { day: 'Sat', visits: 3800 },
-  { day: 'Sun', visits: 4300 },
+const metrics = [
+  { 
+    title: "Total Users", 
+    value: "1.2M", 
+    change: "+12% from last month",
+    icon: <User2 className="h-5 w-5 text-blue-500" />,
+    bgColor: "bg-blue-50"
+  },
+  { 
+    title: "Call Volume", 
+    value: "32.5K",
+    change: "+8% from last month",
+    icon: <Mic className="h-5 w-5 text-purple-500" />,
+    bgColor: "bg-purple-50"
+  },
+  { 
+    title: "User Retention", 
+    value: "89%",
+    change: "+3% from last month",
+    icon: <BarChart3 className="h-5 w-5 text-green-500" />,
+    bgColor: "bg-green-50"
+  }
 ];
 
 export default function App() {
+  const [activeMetric, setActiveMetric] = useState('Users');
+
   return (
-    <div className="min-h-screen bg-gray-100">
-      <div className="p-8">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Analytics Dashboard</h1>
-          <p className="text-gray-600">Track your key metrics and performance indicators</p>
+    <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto">
+        <div className="mb-10">
+          <h1 className="text-2xl font-semibold text-gray-900">Launch Analytics</h1>
+          <p className="mt-1 text-sm text-gray-500">Monitor your key metrics and performance</p>
         </div>
 
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <StatsCard
-            title="Total Users"
-            value="12,345"
-            change="+12.3%"
-            isPositive={true}
-            icon={<Users className="h-6 w-6" />}
-          />
-          <StatsCard
-            title="Engagement Rate"
-            value="78%"
-            change="+5.2%"
-            isPositive={true}
-            icon={<ArrowRight className="h-6 w-6" />}
-          />
-          <StatsCard
-            title="Bounce Rate"
-            value="32%"
-            change="-2.1%"
-            isPositive={false}
-            icon={<ArrowRight className="h-6 w-6" />}
-          />
-        </div>
-
-        {/* Charts */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* User Growth Chart */}
-          <div className="bg-white p-6 rounded-lg shadow">
-            <h2 className="text-xl font-semibold mb-4">User Growth</h2>
-            <div className="h-80">
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={data}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="month" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Line type="monotone" dataKey="users" stroke="#3B82F6" />
-                </LineChart>
-              </ResponsiveContainer>
+        {/* Metrics Grid */}
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 mb-8">
+          {metrics.map((metric, index) => (
+            <div 
+              key={index}
+              className="bg-white overflow-hidden shadow rounded-lg cursor-pointer hover:shadow-md transition-shadow"
+              onClick={() => setActiveMetric(metric.title.replace('Total ', ''))}
+            >
+              <div className="p-5">
+                <div className="flex items-center">
+                  <div className={`flex-shrink-0 rounded-md p-3 ${metric.bgColor}`}>
+                    {metric.icon}
+                  </div>
+                  <div className="ml-5 w-0 flex-1">
+                    <dl>
+                      <dt className="text-sm font-medium text-gray-500 truncate">
+                        {metric.title}
+                      </dt>
+                      <dd>
+                        <div className="text-lg font-semibold text-gray-900">
+                          {metric.value}
+                        </div>
+                      </dd>
+                    </dl>
+                  </div>
+                </div>
+                <div className="mt-4">
+                  <div className="text-sm text-gray-600">
+                    {metric.change}
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
+          ))}
+        </div>
 
-          {/* Daily Visits Chart */}
-          <div className="bg-white p-6 rounded-lg shadow">
-            <h2 className="text-xl font-semibold mb-4">Daily Visits</h2>
-            <div className="h-80">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={dailyVisits}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="day" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Bar dataKey="visits" fill="#3B82F6" />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
+        {/* Chart Section */}
+        <div className="bg-white rounded-lg shadow p-6">
+          <div className="mb-4">
+            <h2 className="text-lg font-semibold text-gray-900">Analytics Overview</h2>
+            <p className="text-sm text-gray-500">Click on metrics above to filter the chart</p>
+          </div>
+          <div className="h-96">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                {activeMetric === 'Users' && (
+                  <Line type="monotone" dataKey="Users" stroke="#3B82F6" strokeWidth={2} />
+                )}
+                {activeMetric === 'Call Volume' && (
+                  <Line type="monotone" dataKey="Call Volume" stroke="#8B5CF6" strokeWidth={2} />
+                )}
+                {activeMetric === 'User Retention' && (
+                  <Line type="monotone" dataKey="User Retention" stroke="#10B981" strokeWidth={2} />
+                )}
+              </LineChart>
+            </ResponsiveContainer>
           </div>
         </div>
-      </div>
-    </div>
-  );
-}
-
-// Stats Card Component
-function StatsCard({ title, value, change, isPositive, icon }) {
-  return (
-    <div className="bg-white p-6 rounded-lg shadow">
-      <div className="flex items-center justify-between">
-        <div>
-          <p className="text-sm text-gray-600">{title}</p>
-          <p className="text-2xl font-semibold mt-1">{value}</p>
-        </div>
-        <div className={`p-3 rounded-full ${isPositive ? 'bg-green-100' : 'bg-red-100'}`}>
-          {icon}
-        </div>
-      </div>
-      <div className="flex items-center mt-4">
-        {isPositive ? (
-          <ArrowUpRight className="w-4 h-4 text-green-600" />
-        ) : (
-          <ArrowDownRight className="w-4 h-4 text-red-600" />
-        )}
-        <span className={`ml-1 ${isPositive ? 'text-green-600' : 'text-red-600'}`}>
-          {change}
-        </span>
-        <span className="text-gray-600 ml-2">vs last month</span>
       </div>
     </div>
   );
