@@ -1,51 +1,117 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 :root {
-  /* Base colors */
-  --color-background: #0f172a;
-  --color-surface: #1e293b;
-  --color-primary: #3b82f6;
-  --color-success: #22c55e;
-  --color-error: #ef4444;
-  --color-warning: #f59e0b;
-  --color-text-primary: #f8fafc;
-  --color-text-secondary: #94a3b8;
+  /* Base Colors */
+  --background: 20 14.3% 4.1%;
+  --foreground: 60 9.1% 97.8%;
+  --card: 20 14.3% 4.1%;
+  --card-foreground: 60 9.1% 97.8%;
+  --popover: 20 14.3% 4.1%;
+  --popover-foreground: 60 9.1% 97.8%;
+  --primary: 47.9 95.8% 53.1%;
+  --primary-foreground: 26 83.3% 14.1%;
+  --secondary: 12 6.5% 15.1%;
+  --secondary-foreground: 60 9.1% 97.8%;
+  --muted: 12 6.5% 15.1%;
+  --muted-foreground: 24 5.4% 63.9%;
+  --accent: 12 6.5% 15.1%;
+  --accent-foreground: 60 9.1% 97.8%;
+  --success: 142.1 70.6% 45.3%;
+  --success-foreground: 144.9 80.4% 10%;
+  --warning: 47.9 95.8% 53.1%;
+  --warning-foreground: 26 83.3% 14.1%;
+  --error: 0 84.2% 60.2%;
+  --error-foreground: 0 85.7% 97.3%;
+  --ring: 35.5 91.7% 32.9%;
+
+  /* Elevation */
+  --ring-offset: 0deg 0% 100%;
+  --radius: 0.75rem;
+
+  /* Animation */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
   
-  /* Chart colors */
-  --chart-grid: rgba(148, 163, 184, 0.1);
-  --chart-line-current: #3b82f6;
-  --chart-line-previous: #6366f1;
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+
+  /* Gradients */
+  --gradient-primary: linear-gradient(145deg, rgb(var(--primary)), rgb(var(--warning)));
+  --gradient-secondary: linear-gradient(145deg, rgb(var(--secondary)), rgb(var(--accent)));
+  --gradient-success: linear-gradient(145deg, rgb(var(--success)), rgb(var(--primary)));
+  --gradient-error: linear-gradient(145deg, rgb(var(--error)), rgb(var(--warning)));
   
-  /* Card colors */
-  --card-background: #1e293b;
-  --card-border: #334155;
-  
-  /* Spacing */
-  --spacing-xs: 0.25rem;
-  --spacing-sm: 0.5rem;
-  --spacing-md: 1rem;
-  --spacing-lg: 1.5rem;
-  --spacing-xl: 2rem;
+  /* Charts */
+  --chart-grid: rgb(var(--muted-foreground) / 0.1);
+  --chart-line: rgb(var(--primary));
+  --chart-point: rgb(var(--background));
+  --chart-point-hover: rgb(var(--primary));
+  --chart-tooltip-bg: rgb(var(--popover));
+  --chart-tooltip-border: rgb(var(--border));
 }
 
 /* Base styles */
-body {
-  @apply bg-[var(--color-background)] text-[var(--color-text-primary)];
+@layer base {
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
 }
 
-/* Card styles */
-.metric-card {
-  @apply bg-[var(--card-background)] border border-[var(--card-border)] rounded-lg p-4;
-}
+/* Component styles */
+@layer components {
+  /* Card styles */
+  .card {
+    @apply rounded-lg border border-border bg-card text-card-foreground shadow-sm transition-all;
+  }
+  
+  /* Button styles */
+  .button {
+    @apply inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors
+      disabled:pointer-events-none disabled:opacity-50;
+  }
+  
+  .button-primary {
+    @apply bg-primary text-primary-foreground hover:bg-primary/90;
+  }
+  
+  .button-secondary {
+    @apply bg-secondary text-secondary-foreground hover:bg-secondary/80;
+  }
+  
+  /* Input styles */
+  .input {
+    @apply flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm
+      ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium
+      placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2
+      focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
+  }
 
-/* Chart styles */
-.recharts-cartesian-grid-horizontal line,
-.recharts-cartesian-grid-vertical line {
-  @apply stroke-[var(--chart-grid)];
-}
+  /* Chart customization */
+  .recharts-cartesian-grid-horizontal line,
+  .recharts-cartesian-grid-vertical line {
+    stroke: var(--chart-grid);
+  }
 
-.recharts-line-dot {
-  @apply fill-[var(--chart-line-current)];
+  .recharts-line path {
+    stroke: var(--chart-line);
+  }
+
+  .recharts-scatter-dot circle {
+    fill: var(--chart-point);
+    stroke: var(--chart-line);
+    stroke-width: 2;
+  }
+
+  .recharts-scatter-dot:hover circle {
+    fill: var(--chart-point-hover);
+  }
+
+  .recharts-tooltip-wrapper .recharts-default-tooltip {
+    background-color: var(--chart-tooltip-bg) !important;
+    border-color: var(--chart-tooltip-border) !important;
+  }
 }

@@ -1,0 +1,57 @@
+.card {
+  @apply relative rounded-lg border border-border bg-gradient-to-br from-card to-card/95 p-6;
+  backdrop-filter: blur(8px);
+  transform-style: preserve-3d;
+  transition: all var(--transition-normal);
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(130deg, rgb(var(--primary) / 0.2), rgb(var(--primary) / 0.1), transparent);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity var(--transition-normal);
+}
+
+.card:hover {
+  transform: translateY(-2px) rotateX(1deg) rotateY(1deg);
+}
+
+.card:hover::before {
+  opacity: 1;
+}
+
+.title {
+  @apply mb-2 text-sm font-medium text-muted-foreground;
+}
+
+.value {
+  @apply mb-1 text-2xl font-semibold tracking-tight;
+}
+
+.change {
+  @apply flex items-center gap-1 text-sm font-medium;
+}
+
+.positive {
+  @apply text-success;
+}
+
+.negative {
+  @apply text-error;
+}
+
+.icon {
+  @apply h-4 w-4;
+}
+
+.trend {
+  @apply ml-2 text-xs text-muted-foreground;
+}
