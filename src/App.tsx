@@ -1,114 +1,150 @@
 import React, { useState } from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { Mic, User2, BarChart3 } from 'lucide-react';
+import MetricCard from './components/MetricCard';
+import TimeChart from './components/TimeChart';
+import LandingPageTable from './components/LandingPageTable';
+import './styles/theme.css';
 
-const data = [
-  { name: 'Jan', Users: 4000, 'Call Volume': 2400, 'User Retention': 2400 },
-  { name: 'Feb', Users: 3000, 'Call Volume': 1398, 'User Retention': 2210 },
-  { name: 'Mar', Users: 2000, 'Call Volume': 9800, 'User Retention': 2290 },
-  { name: 'Apr', Users: 2780, 'Call Volume': 3908, 'User Retention': 2000 },
-  { name: 'May', Users: 1890, 'Call Volume': 4800, 'User Retention': 2181 },
-  { name: 'Jun', Users: 2390, 'Call Volume': 3800, 'User Retention': 2500 },
-  { name: 'Jul', Users: 3490, 'Call Volume': 4300, 'User Retention': 2100 },
+// Sample data generation for the time series chart
+const generateTimeData = () => {
+  const now = new Date();
+  return Array.from({ length: 24 }, (_, i) => {
+    const hour = (now.getHours() - 23 + i + 24) % 24;
+    return {
+      time: `${hour}:00`,
+      current: Math.floor(Math.random() * 1000) + 500,
+      previous: Math.floor(Math.random() * 1000) + 500,
+    };
+  });
+};
+
+// Sample data for our metrics and tables
+const timeData = generateTimeData();
+
+const landingPages = [
+  {
+    url: '/checkout/success',
+    revenue: 37587.6,
+    views: 2156,
+    entries: 464,
+    bounce: 31.7,
+    cvr: 4.5,
+  },
+  {
+    url: '/products',
+    revenue: 0,
+    views: 1229,
+    entries: 831,
+    bounce: 12.5,
+    cvr: 3.9,
+  },
+  {
+    url: '/product/details',
+    revenue: 0,
+    views: 3308,
+    entries: 406,
+    bounce: 20.4,
+    cvr: 2.2,
+  },
+  {
+    url: '/start',
+    revenue: 0,
+    views: 2675,
+    entries: 915,
+    bounce: 16.8,
+    cvr: 1.7,
+  },
 ];
 
 const metrics = [
-  { 
-    title: "Total Users", 
-    value: "1.2M", 
-    change: "+12% from last month",
-    icon: <User2 className="h-5 w-5 text-blue-500" />,
-    bgColor: "bg-blue-50"
+  {
+    title: 'Conversion Rate',
+    value: '3.8',
+    change: -9.9,
+    isPercentage: true,
   },
-  { 
-    title: "Call Volume", 
-    value: "32.5K",
-    change: "+8% from last month",
-    icon: <Mic className="h-5 w-5 text-purple-500" />,
-    bgColor: "bg-purple-50"
+  {
+    title: 'Revenue',
+    value: '23848',
+    change: -14.1,
+    isMonetary: true,
   },
-  { 
-    title: "User Retention", 
-    value: "89%",
-    change: "+3% from last month",
-    icon: <BarChart3 className="h-5 w-5 text-green-500" />,
-    bgColor: "bg-green-50"
-  }
+  {
+    title: 'Sessions',
+    value: '55681',
+    change: 8.9,
+  },
+  {
+    title: 'Engagement',
+    value: '30.3',
+    change: 3.4,
+    isPercentage: true,
+  },
+  {
+    title: 'Bounce Rate',
+    value: '31.7',
+    change: -1.3,
+    isPercentage: true,
+  },
+  {
+    title: 'Avg Order',
+    value: '148',
+    change: 8.3,
+    isMonetary: true,
+  },
 ];
 
 export default function App() {
-  const [activeMetric, setActiveMetric] = useState('Users');
+  // State for period and source filters
+  const [period] = useState('Today');
+  const [source] = useState('All Traffic');
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
-        <div className="mb-10">
-          <h1 className="text-2xl font-semibold text-gray-900">Launch Analytics</h1>
-          <p className="mt-1 text-sm text-gray-500">Monitor your key metrics and performance</p>
+    <div className="min-h-screen bg-[var(--color-background)] p-6">
+      <div className="max-w-[1400px] mx-auto">
+        {/* Header section */}
+        <div className="flex justify-between items-center mb-8">
+          <div>
+            <h1 className="text-2xl font-semibold mb-1">Launch Analytics 🚀</h1>
+            <p className="text-[var(--color-text-secondary)]">Track your key metrics and performance</p>
+          </div>
+          <div className="flex gap-4">
+            <div className="metric-card px-4 py-2">
+              <span className="text-sm text-[var(--color-text-secondary)]">Period: </span>
+              <span className="font-medium">{period}</span>
+            </div>
+            <div className="metric-card px-4 py-2">
+              <span className="text-sm text-[var(--color-text-secondary)]">Source: </span>
+              <span className="font-medium">{source}</span>
+            </div>
+          </div>
         </div>
 
         {/* Metrics Grid */}
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
           {metrics.map((metric, index) => (
-            <div 
+            <MetricCard
               key={index}
-              className="bg-white overflow-hidden shadow rounded-lg cursor-pointer hover:shadow-md transition-shadow"
-              onClick={() => setActiveMetric(metric.title.replace('Total ', ''))}
-            >
-              <div className="p-5">
-                <div className="flex items-center">
-                  <div className={`flex-shrink-0 rounded-md p-3 ${metric.bgColor}`}>
-                    {metric.icon}
-                  </div>
-                  <div className="ml-5 w-0 flex-1">
-                    <dl>
-                      <dt className="text-sm font-medium text-gray-500 truncate">
-                        {metric.title}
-                      </dt>
-                      <dd>
-                        <div className="text-lg font-semibold text-gray-900">
-                          {metric.value}
-                        </div>
-                      </dd>
-                    </dl>
-                  </div>
-                </div>
-                <div className="mt-4">
-                  <div className="text-sm text-gray-600">
-                    {metric.change}
-                  </div>
-                </div>
-              </div>
-            </div>
+              title={metric.title}
+              value={metric.value}
+              change={metric.change}
+              isMonetary={metric.isMonetary}
+              isPercentage={metric.isPercentage}
+            />
           ))}
         </div>
 
-        {/* Chart Section */}
-        <div className="bg-white rounded-lg shadow p-6">
-          <div className="mb-4">
-            <h2 className="text-lg font-semibold text-gray-900">Analytics Overview</h2>
-            <p className="text-sm text-gray-500">Click on metrics above to filter the chart</p>
-          </div>
-          <div className="h-96">
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                {activeMetric === 'Users' && (
-                  <Line type="monotone" dataKey="Users" stroke="#3B82F6" strokeWidth={2} />
-                )}
-                {activeMetric === 'Call Volume' && (
-                  <Line type="monotone" dataKey="Call Volume" stroke="#8B5CF6" strokeWidth={2} />
-                )}
-                {activeMetric === 'User Retention' && (
-                  <Line type="monotone" dataKey="User Retention" stroke="#10B981" strokeWidth={2} />
-                )}
-              </LineChart>
-            </ResponsiveContainer>
-          </div>
+        {/* Time Series Chart */}
+        <div className="mb-8">
+          <TimeChart
+            data={timeData}
+            title="Traffic Overview"
+            subtitle="Click on metrics to filter the chart"
+          />
+        </div>
+
+        {/* Landing Pages Table */}
+        <div>
+          <LandingPageTable data={landingPages} />
         </div>
       </div>
     </div>
