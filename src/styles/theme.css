@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Base colors */
+  --color-background: #0f172a;
+  --color-surface: #1e293b;
+  --color-primary: #3b82f6;
+  --color-success: #22c55e;
+  --color-error: #ef4444;
+  --color-warning: #f59e0b;
+  --color-text-primary: #f8fafc;
+  --color-text-secondary: #94a3b8;
+  
+  /* Chart colors */
+  --chart-grid: rgba(148, 163, 184, 0.1);
+  --chart-line-current: #3b82f6;
+  --chart-line-previous: #6366f1;
+  
+  /* Card colors */
+  --card-background: #1e293b;
+  --card-border: #334155;
+  
+  /* Spacing */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+}
+
+/* Base styles */
+body {
+  @apply bg-[var(--color-background)] text-[var(--color-text-primary)];
+}
+
+/* Card styles */
+.metric-card {
+  @apply bg-[var(--card-background)] border border-[var(--card-border)] rounded-lg p-4;
+}
+
+/* Chart styles */
+.recharts-cartesian-grid-horizontal line,
+.recharts-cartesian-grid-vertical line {
+  @apply stroke-[var(--chart-grid)];
+}
+
+.recharts-line-dot {
+  @apply fill-[var(--chart-line-current)];
+}
