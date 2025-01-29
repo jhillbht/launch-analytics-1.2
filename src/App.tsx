@@ -1,25 +1,28 @@
 import React, { useState } from 'react';
+import { RefreshCw } from 'lucide-react';
 import MetricCard from './components/MetricCard';
 import TimeChart from './components/TimeChart';
 import LandingPageTable from './components/LandingPageTable';
+import DropdownSelect from './components/DropdownSelect';
+import { useDemoData } from './hooks/useDemoData';
 import './styles/theme.css';
 
-// Sample data generation for the time series chart
-const generateTimeData = () => {
-  const now = new Date();
-  return Array.from({ length: 24 }, (_, i) => {
-    const hour = (now.getHours() - 23 + i + 24) % 24;
-    return {
-      time: `${hour}:00`,
-      current: Math.floor(Math.random() * 1000) + 500,
-      previous: Math.floor(Math.random() * 1000) + 500,
-    };
-  });
-};
+// Options for the period and source dropdowns
+const periodOptions = [
+  { label: 'Today', value: 'today' },
+  { label: 'Yesterday', value: 'yesterday' },
+  { label: 'Last 7 days', value: '7days' },
+  { label: 'Last 30 days', value: '30days' },
+];
 
-// Sample data for our metrics and tables
-const timeData = generateTimeData();
+const sourceOptions = [
+  { label: 'All Traffic', value: 'all' },
+  { label: 'Organic Search', value: 'organic' },
+  { label: 'Direct', value: 'direct' },
+  { label: 'Social', value: 'social' },
+];
 
+// Sample landing page data
 const landingPages = [
   {
     url: '/checkout/success',
@@ -55,95 +58,135 @@ const landingPages = [
   },
 ];
 
-const metrics = [
-  {
-    title: 'Conversion Rate',
-    value: '3.8',
-    change: -9.9,
-    isPercentage: true,
-  },
-  {
-    title: 'Revenue',
-    value: '23848',
-    change: -14.1,
-    isMonetary: true,
-  },
-  {
-    title: 'Sessions',
-    value: '55681',
-    change: 8.9,
-  },
-  {
-    title: 'Engagement',
-    value: '30.3',
-    change: 3.4,
-    isPercentage: true,
-  },
-  {
-    title: 'Bounce Rate',
-    value: '31.7',
-    change: -1.3,
-    isPercentage: true,
-  },
-  {
-    title: 'Avg Order',
-    value: '148',
-    change: 8.3,
-    isMonetary: true,
-  },
-];
-
 export default function App() {
-  // State for period and source filters
-  const [period] = useState('Today');
-  const [source] = useState('All Traffic');
+  // Initialize demo data and state
+  const { data, refreshData, generateTimeSeriesData } = useDemoData();
+  const [period, setPeriod] = useState('today');
+  const [source, setSource] = useState('all');
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [activeMetric, setActiveMetric] = useState('conversion');
+
+  // Handle refresh button click with animation
+  const handleRefresh = async () => {
+    setIsRefreshing(true);
+    refreshData();
+    // Add a slight delay for the refresh animation
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    setIsRefreshing(false);
+  };
+
+  // Generate time series data for the chart
+  const timeData = generateTimeSeriesData(24);
 
   return (
-    <div className="min-h-screen bg-[var(--color-background)] p-6">
+    <div className="min-h-screen bg-[#0f172a] text-white p-6">
       <div className="max-w-[1400px] mx-auto">
-        {/* Header section */}
+        {/* Header Section */}
         <div className="flex justify-between items-center mb-8">
           <div>
-            <h1 className="text-2xl font-semibold mb-1">Launch Analytics 🚀</h1>
-            <p className="text-[var(--color-text-secondary)]">Track your key metrics and performance</p>
+            <h1 className="text-2xl font-semibold mb-1 flex items-center gap-2">
+              Launch Analytics
+              <span role="img" aria-label="rocket" className="text-2xl animate-pulse">🚀</span>
+            </h1>
+            <p className="text-gray-400">Track your key metrics and performance</p>
           </div>
-          <div className="flex gap-4">
-            <div className="metric-card px-4 py-2">
-              <span className="text-sm text-[var(--color-text-secondary)]">Period: </span>
-              <span className="font-medium">{period}</span>
-            </div>
-            <div className="metric-card px-4 py-2">
-              <span className="text-sm text-[var(--color-text-secondary)]">Source: </span>
-              <span className="font-medium">{source}</span>
-            </div>
-          </div>
-        </div>
 
-        {/* Metrics Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
-          {metrics.map((metric, index) => (
-            <MetricCard
-              key={index}
-              title={metric.title}
-              value={metric.value}
-              change={metric.change}
-              isMonetary={metric.isMonetary}
-              isPercentage={metric.isPercentage}
+          {/* Controls */}
+          <div className="flex items-center gap-4">
+            <DropdownSelect
+              label="Period"
+              options={periodOptions}
+              value={period}
+              onChange={setPeriod}
             />
-          ))}
+            <DropdownSelect
+              label="Source"
+              options={sourceOptions}
+              value={source}
+              onChange={setSource}
+            />
+            <button
+              onClick={handleRefresh}
+              className="bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white px-4 py-2 rounded-lg
+                       flex items-center gap-2 transition-all duration-200 active:scale-95 shadow-lg
+                       hover:shadow-blue-500/25"
+            >
+              <RefreshCw
+                size={16}
+                className={`${isRefreshing ? 'animate-spin' : ''} 
+                           transition-transform duration-300 ease-in-out`}
+              />
+              Refresh
+            </button>
+          </div>
         </div>
 
-        {/* Time Series Chart */}
-        <div className="mb-8">
-          <TimeChart
-            data={timeData}
-            title="Traffic Overview"
-            subtitle="Click on metrics to filter the chart"
+        {/* Metrics Grid with Interactive Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+          <MetricCard
+            title="Conversion Rate"
+            value={data.conversionRate.value.toString()}
+            change={data.conversionRate.change}
+            isPercentage
+            onClick={() => setActiveMetric('conversion')}
+          />
+          <MetricCard
+            title="Revenue"
+            value={data.revenue.value.toString()}
+            change={data.revenue.change}
+            isMonetary
+            onClick={() => setActiveMetric('revenue')}
+          />
+          <MetricCard
+            title="Sessions"
+            value={data.sessions.value.toString()}
+            change={data.sessions.change}
+            onClick={() => setActiveMetric('sessions')}
+          />
+          <MetricCard
+            title="Engagement"
+            value={data.engagement.value.toString()}
+            change={data.engagement.change}
+            isPercentage
+            onClick={() => setActiveMetric('engagement')}
+          />
+          <MetricCard
+            title="Bounce Rate"
+            value={data.bounceRate.value.toString()}
+            change={data.bounceRate.change}
+            isPercentage
+            onClick={() => setActiveMetric('bounce')}
+          />
+          <MetricCard
+            title="Avg Order"
+            value={data.avgOrder.value.toString()}
+            change={data.avgOrder.change}
+            isMonetary
+            onClick={() => setActiveMetric('order')}
           />
         </div>
 
-        {/* Landing Pages Table */}
-        <div>
+        {/* Interactive Chart Section */}
+        <div className="bg-[#1e2738] rounded-xl p-6 mb-8 shadow-xl
+                      transition-all duration-300 ease-out hover:shadow-2xl
+                      hover:shadow-blue-500/10">
+          <div className="mb-4">
+            <h2 className="text-lg font-semibold mb-1">Traffic Overview</h2>
+            <p className="text-sm text-gray-400">Click on metrics above to filter the chart</p>
+          </div>
+          <div className="h-[400px]"> {/* Increased height for better visibility */}
+            <TimeChart
+              data={timeData}
+              title="Traffic Overview"
+              activeMetric={activeMetric}
+            />
+          </div>
+        </div>
+
+        {/* Landing Pages Section */}
+        <div className="bg-[#1e2738] rounded-xl p-6 shadow-xl
+                      transition-all duration-300 ease-out hover:shadow-2xl
+                      hover:shadow-blue-500/10">
           <LandingPageTable data={landingPages} />
         </div>
       </div>
