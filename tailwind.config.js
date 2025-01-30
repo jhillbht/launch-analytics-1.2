@@ -1,33 +1,60 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
+  content: [
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}",
+  ],
   theme: {
     extend: {
       colors: {
-        navy: {
-          900: '#1a1f2b',
-          950: '#151821',
-        },
+        primary: 'rgb(var(--color-primary))',
+        'primary-light': 'rgb(var(--color-primary-light))',
+        'primary-dark': 'rgb(var(--color-primary-dark))',
+        secondary: 'rgb(var(--color-secondary))',
+        accent: 'rgb(var(--color-accent))',
+        'bg-primary': 'rgb(var(--color-bg-primary))',
+        'bg-secondary': 'rgb(var(--color-bg-secondary))',
+        'text-primary': 'rgb(var(--color-text-primary))',
+        'text-secondary': 'rgb(var(--color-text-secondary))',
       },
       animation: {
-        'pulse-subtle': 'pulse-subtle 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-        'bounce-subtle': 'bounce-subtle 2s infinite',
+        'gradient-x': 'gradient-x 15s ease infinite',
+        'gradient-y': 'gradient-y 15s ease infinite',
+        'gradient-xy': 'gradient-xy 15s ease infinite',
       },
       keyframes: {
-        'pulse-subtle': {
-          '0%, 100%': { opacity: 1 },
-          '50%': { opacity: 0.8 },
-        },
-        'bounce-subtle': {
+        'gradient-y': {
           '0%, 100%': {
-            transform: 'translateY(0)',
+            'background-size': '400% 400%',
+            'background-position': 'center top'
           },
           '50%': {
-            transform: 'translateY(-10%)',
-          },
+            'background-size': '200% 200%',
+            'background-position': 'center center'
+          }
         },
-      },
-    },
+        'gradient-x': {
+          '0%, 100%': {
+            'background-size': '200% 200%',
+            'background-position': 'left center'
+          },
+          '50%': {
+            'background-size': '200% 200%',
+            'background-position': 'right center'
+          }
+        },
+        'gradient-xy': {
+          '0%, 100%': {
+            'background-size': '400% 400%',
+            'background-position': 'left center'
+          },
+          '50%': {
+            'background-size': '200% 200%',
+            'background-position': 'right center'
+          }
+        }
+      }
+    }
   },
-  plugins: [],
-};
+  plugins: []
+}
