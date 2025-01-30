@@ -1,0 +1,35 @@
+name: launch-analytics-1-2
+services:
+  - name: web
+    github:
+      repo: jhillbht/launch-analytics-1.2
+      branch: main
+    build_command: npm run build
+    run_command: npm start
+    envs:
+      - key: GITHUB_OWNER
+        value: jhillbht
+      - key: GITHUB_REPO
+        value: launch-analytics-1.2
+      - key: GITHUB_TOKEN
+        type: SECRET
+        value: "${GITHUB_TOKEN}"
+
+  - name: webhook-handler
+    github:
+      repo: jhillbht/launch-analytics-1.2
+      branch: main
+    build_command: npm run build
+    run_command: node dist/webhook.js
+    routes:
+      - path: /webhooks
+    http_port: 8080
+    instance_size_slug: basic-xxs
+    envs:
+      - key: GITHUB_OWNER
+        value: jhillbht
+      - key: GITHUB_REPO
+        value: launch-analytics-1.2
+      - key: GITHUB_TOKEN
+        type: SECRET
+        value: "${GITHUB_TOKEN}"
