@@ -1,117 +1,76 @@
-:root {
-  /* Base Colors */
-  --background: 20 14.3% 4.1%;
-  --foreground: 60 9.1% 97.8%;
-  --card: 20 14.3% 4.1%;
-  --card-foreground: 60 9.1% 97.8%;
-  --popover: 20 14.3% 4.1%;
-  --popover-foreground: 60 9.1% 97.8%;
-  --primary: 47.9 95.8% 53.1%;
-  --primary-foreground: 26 83.3% 14.1%;
-  --secondary: 12 6.5% 15.1%;
-  --secondary-foreground: 60 9.1% 97.8%;
-  --muted: 12 6.5% 15.1%;
-  --muted-foreground: 24 5.4% 63.9%;
-  --accent: 12 6.5% 15.1%;
-  --accent-foreground: 60 9.1% 97.8%;
-  --success: 142.1 70.6% 45.3%;
-  --success-foreground: 144.9 80.4% 10%;
-  --warning: 47.9 95.8% 53.1%;
-  --warning-foreground: 26 83.3% 14.1%;
-  --error: 0 84.2% 60.2%;
-  --error-foreground: 0 85.7% 97.3%;
-  --ring: 35.5 91.7% 32.9%;
+/* Theme configuration for the analytics dashboard */
 
-  /* Elevation */
-  --ring-offset: 0deg 0% 100%;
-  --radius: 0.75rem;
-
-  /* Animation */
-  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-normal: 200ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
-  
-  /* Shadows */
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-
-  /* Gradients */
-  --gradient-primary: linear-gradient(145deg, rgb(var(--primary)), rgb(var(--warning)));
-  --gradient-secondary: linear-gradient(145deg, rgb(var(--secondary)), rgb(var(--accent)));
-  --gradient-success: linear-gradient(145deg, rgb(var(--success)), rgb(var(--primary)));
-  --gradient-error: linear-gradient(145deg, rgb(var(--error)), rgb(var(--warning)));
-  
-  /* Charts */
-  --chart-grid: rgb(var(--muted-foreground) / 0.1);
-  --chart-line: rgb(var(--primary));
-  --chart-point: rgb(var(--background));
-  --chart-point-hover: rgb(var(--primary));
-  --chart-tooltip-bg: rgb(var(--popover));
-  --chart-tooltip-border: rgb(var(--border));
-}
-
-/* Base styles */
 @layer base {
-  body {
-    @apply bg-background text-foreground;
-    font-feature-settings: "rlig" 1, "calt" 1;
+  :root {
+    /* Color tokens */
+    --color-primary: 59 130 246;    /* Blue-500 */
+    --color-primary-light: 96 165 250;   /* Blue-400 */
+    --color-primary-dark: 37 99 235;     /* Blue-600 */
+    
+    --color-secondary: 99 102 241;   /* Indigo-500 */
+    --color-accent: 139 92 246;      /* Violet-500 */
+    
+    /* Dark mode colors */
+    --color-bg-primary: 17 24 39;    /* Gray-900 */
+    --color-bg-secondary: 31 41 55;  /* Gray-800 */
+    --color-text-primary: 243 244 246;  /* Gray-100 */
+    --color-text-secondary: 209 213 219;  /* Gray-300 */
+    
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, rgb(var(--color-primary)) 0%, rgb(var(--color-secondary)) 100%);
+    --gradient-accent: linear-gradient(135deg, rgb(var(--color-accent)) 0%, rgb(var(--color-primary)) 100%);
   }
 }
 
-/* Component styles */
 @layer components {
-  /* Card styles */
-  .card {
-    @apply rounded-lg border border-border bg-card text-card-foreground shadow-sm transition-all;
-  }
-  
-  /* Button styles */
-  .button {
-    @apply inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors
-      disabled:pointer-events-none disabled:opacity-50;
-  }
-  
-  .button-primary {
-    @apply bg-primary text-primary-foreground hover:bg-primary/90;
-  }
-  
-  .button-secondary {
-    @apply bg-secondary text-secondary-foreground hover:bg-secondary/80;
-  }
-  
-  /* Input styles */
-  .input {
-    @apply flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm
-      ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium
-      placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2
-      focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
+  .metric-card {
+    @apply bg-gray-800 rounded-xl p-6 relative overflow-hidden transition-all duration-300;
+    background: rgb(var(--color-bg-secondary));
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px);
+    
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+      border-color: rgba(var(--color-primary), 0.5);
+    }
+    
+    .metric-value {
+      @apply text-4xl font-bold mb-2;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
   }
 
-  /* Chart customization */
-  .recharts-cartesian-grid-horizontal line,
-  .recharts-cartesian-grid-vertical line {
-    stroke: var(--chart-grid);
+  .chart-container {
+    @apply rounded-xl p-4 bg-gray-800 border border-gray-700;
+    background: rgb(var(--color-bg-secondary));
   }
 
-  .recharts-line path {
-    stroke: var(--chart-line);
+  .dropdown-select {
+    @apply bg-gray-800 border border-gray-700 rounded-lg p-2 text-gray-200;
+    &:hover {
+      @apply border-blue-500;
+    }
+  }
+}
+
+@layer utilities {
+  .text-gradient-primary {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
 
-  .recharts-scatter-dot circle {
-    fill: var(--chart-point);
-    stroke: var(--chart-line);
-    stroke-width: 2;
+  .text-gradient-accent {
+    background: var(--gradient-accent);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
 
-  .recharts-scatter-dot:hover circle {
-    fill: var(--chart-point-hover);
-  }
-
-  .recharts-tooltip-wrapper .recharts-default-tooltip {
-    background-color: var(--chart-tooltip-bg) !important;
-    border-color: var(--chart-tooltip-border) !important;
+  .bg-glass {
+    @apply bg-opacity-30 backdrop-blur-lg;
+    border: 1px solid rgba(255, 255, 255, 0.1);
   }
 }
