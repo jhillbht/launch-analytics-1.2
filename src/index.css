@@ -1,25 +1,7 @@
+/* Base Tailwind imports */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-body {
-  @apply bg-navy-950 text-white;
-}
-
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  @apply bg-navy-950;
-}
-
-::-webkit-scrollbar-thumb {
-  @apply bg-gray-700 rounded;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  @apply bg-gray-600;
-}
+/* Import our theme customizations */
+@import './styles/theme.css';
