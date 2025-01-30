@@ -1,35 +1,27 @@
-name: launch-analytics-1-2
+name: hammerhead-app
 services:
   - name: web
     github:
-      repo: jhillbht/launch-analytics-1.2
       branch: main
-    build_command: npm run build
+      deploy_on_push: true
+      repo: jhillbht/launch-analytics-1.2
+    build_command: npm install && npm run build
     run_command: npm start
-    envs:
-      - key: GITHUB_OWNER
-        value: jhillbht
-      - key: GITHUB_REPO
-        value: launch-analytics-1.2
-      - key: GITHUB_TOKEN
-        type: SECRET
-        value: "${GITHUB_TOKEN}"
-
-  - name: webhook-handler
-    github:
-      repo: jhillbht/launch-analytics-1.2
-      branch: main
-    build_command: npm run build
-    run_command: node dist/webhook.js
-    routes:
-      - path: /webhooks
-    http_port: 8080
+    environment_slug: node-js
+    instance_count: 1
     instance_size_slug: basic-xxs
+    http_port: 3000
     envs:
-      - key: GITHUB_OWNER
-        value: jhillbht
-      - key: GITHUB_REPO
-        value: launch-analytics-1.2
+      - key: NODE_ENV
+        value: production
       - key: GITHUB_TOKEN
         type: SECRET
-        value: "${GITHUB_TOKEN}"
+        value: ${GITHUB_TOKEN}
+    routes:
+      - path: /
+    health_check:
+      http_path: /health
+      period_seconds: 10
+      timeout_seconds: 5
+      failure_threshold: 3
+      success_threshold: 1
