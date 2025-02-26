@@ -42,17 +42,17 @@ export function Header({ onRefresh, isRefreshing }: HeaderProps) {
   };
 
   return (
-    <header className="bg-navy-950 p-4">
+    <header className="bg-navy-900 border-b border-slate-700/30 p-6">
       <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-2">
-          <Rocket className="text-purple-400 h-6 w-6" />
-          <h1 className="text-purple-400 text-xl font-semibold">Launch Analytics</h1>
+        <div className="flex items-center space-x-3">
+          <Rocket className="text-blue-500 h-6 w-6" />
+          <h1 className="text-white text-xl font-semibold">Launch Analytics</h1>
         </div>
         <div className="flex items-center space-x-4">
           <div className="relative">
-            <span className="text-gray-400 mr-2">Period:</span>
+            <span className="text-slate-400 mr-2">Period:</span>
             <button 
-              className="bg-navy-900 text-white px-3 py-1 rounded flex items-center hover:bg-navy-900/80 transition-colors duration-200"
+              className="bg-navy-800/50 text-white px-4 py-2 rounded-lg border border-slate-700/30 flex items-center hover:bg-navy-800/70 transition-colors duration-200"
               onClick={() => {
                 setIsPeriodDropdownOpen(!isPeriodDropdownOpen);
                 setIsSourceDropdownOpen(false);
@@ -70,15 +70,15 @@ export function Header({ onRefresh, isRefreshing }: HeaderProps) {
             </button>
             
             {isPeriodDropdownOpen && (
-              <div className="absolute z-10 mt-1 w-48 rounded-md shadow-lg bg-navy-900 ring-1 ring-black ring-opacity-5">
+              <div className="absolute z-10 mt-2 w-48 rounded-lg shadow-lg bg-navy-800 border border-slate-700/30">
                 <div className="py-1" role="menu" aria-orientation="vertical">
                   {periods.map((p) => (
                     <button
                       key={p.value}
                       className={`block w-full text-left px-4 py-2 text-sm ${
                         period === p.value 
-                          ? 'bg-purple-500/20 text-purple-400' 
-                          : 'text-gray-300 hover:bg-navy-950 hover:text-white'
+                          ? 'bg-blue-500/20 text-blue-400' 
+                          : 'text-slate-300 hover:bg-navy-900 hover:text-white'
                       } transition-colors duration-150`}
                       role="menuitem"
                       onClick={() => handlePeriodChange(p.value)}
@@ -92,9 +92,9 @@ export function Header({ onRefresh, isRefreshing }: HeaderProps) {
           </div>
 
           <div className="relative">
-            <span className="text-gray-400 mr-2">Source:</span>
+            <span className="text-slate-400 mr-2">Source:</span>
             <button 
-              className="bg-navy-900 text-white px-3 py-1 rounded flex items-center hover:bg-navy-900/80 transition-colors duration-200"
+              className="bg-navy-800/50 text-white px-4 py-2 rounded-lg border border-slate-700/30 flex items-center hover:bg-navy-800/70 transition-colors duration-200"
               onClick={() => {
                 setIsSourceDropdownOpen(!isSourceDropdownOpen);
                 setIsPeriodDropdownOpen(false);
@@ -112,15 +112,15 @@ export function Header({ onRefresh, isRefreshing }: HeaderProps) {
             </button>
 
             {isSourceDropdownOpen && (
-              <div className="absolute z-10 mt-1 w-48 rounded-md shadow-lg bg-navy-900 ring-1 ring-black ring-opacity-5">
+              <div className="absolute z-10 mt-2 w-48 rounded-lg shadow-lg bg-navy-800 border border-slate-700/30">
                 <div className="py-1" role="menu" aria-orientation="vertical">
                   {sources.map((s) => (
                     <button
                       key={s.value}
                       className={`block w-full text-left px-4 py-2 text-sm ${
                         source === s.value 
-                          ? 'bg-purple-500/20 text-purple-400' 
-                          : 'text-gray-300 hover:bg-navy-950 hover:text-white'
+                          ? 'bg-blue-500/20 text-blue-400' 
+                          : 'text-slate-300 hover:bg-navy-900 hover:text-white'
                       } transition-colors duration-150`}
                       role="menuitem"
                       onClick={() => handleSourceChange(s.value)}
@@ -134,8 +134,8 @@ export function Header({ onRefresh, isRefreshing }: HeaderProps) {
           </div>
 
           <button 
-            className={`bg-purple-500 text-white px-4 py-1 rounded flex items-center transition-all duration-200 ${
-              isRefreshing ? 'opacity-75 cursor-not-allowed' : 'hover:bg-purple-600'
+            className={`bg-blue-500 text-white px-4 py-2 rounded-lg flex items-center transition-all duration-200 ${
+              isRefreshing ? 'opacity-75 cursor-not-allowed' : 'hover:bg-blue-600'
             }`}
             onClick={onRefresh}
             disabled={isRefreshing}

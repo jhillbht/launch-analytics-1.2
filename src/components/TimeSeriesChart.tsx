@@ -10,23 +10,26 @@ interface TimeSeriesChartProps {
 
 export function TimeSeriesChart({ data }: TimeSeriesChartProps) {
   return (
-    <div className="bg-navy-900 p-4 rounded-lg">
+    <div className="bg-navy-800/50 p-6 rounded-xl border border-slate-700/30">
+      <h2 className="text-xl font-semibold text-white mb-6">Traffic Overview</h2>
       <ResponsiveContainer width="100%" height={300}>
         <LineChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#1f2937" />
+          <CartesianGrid strokeDasharray="3 3" stroke="#334155" opacity={0.2} />
           <XAxis 
             dataKey="time" 
-            stroke="#6b7280"
-            tick={{ fill: '#6b7280' }}
+            stroke="#64748B"
+            tick={{ fill: '#64748B' }}
+            axisLine={{ stroke: '#334155', opacity: 0.2 }}
           />
           <YAxis 
-            stroke="#6b7280"
-            tick={{ fill: '#6b7280' }}
+            stroke="#64748B"
+            tick={{ fill: '#64748B' }}
+            axisLine={{ stroke: '#334155', opacity: 0.2 }}
           />
           <Tooltip 
             contentStyle={{ 
-              backgroundColor: '#1a1f2b',
-              border: 'none',
+              backgroundColor: '#1E293B',
+              border: '1px solid #334155',
               borderRadius: '8px',
               color: '#fff'
             }}
@@ -34,30 +37,30 @@ export function TimeSeriesChart({ data }: TimeSeriesChartProps) {
           <Line 
             type="monotone" 
             dataKey="current" 
-            stroke="#60a5fa" 
+            stroke="#3B82F6" 
             strokeWidth={2}
-            dot={{ fill: '#60a5fa', r: 4 }}
-            activeDot={{ r: 6, fill: '#60a5fa' }}
+            dot={false}
+            activeDot={{ r: 6, fill: '#3B82F6' }}
           />
           <Line 
             type="monotone" 
             dataKey="previous" 
-            stroke="#818cf8" 
+            stroke="#6366F1" 
             strokeWidth={2}
-            dot={{ fill: '#818cf8', r: 4 }}
-            activeDot={{ r: 6, fill: '#818cf8' }}
+            dot={false}
+            activeDot={{ r: 6, fill: '#6366F1' }}
             strokeDasharray="5 5"
           />
         </LineChart>
       </ResponsiveContainer>
-      <div className="flex justify-center mt-4 space-x-6">
+      <div className="flex justify-center mt-6 space-x-8">
         <div className="flex items-center">
-          <div className="w-3 h-3 bg-blue-400 rounded-full mr-2"></div>
-          <span className="text-gray-400">Current Period</span>
+          <div className="w-3 h-3 bg-blue-500 rounded-full mr-2"></div>
+          <span className="text-slate-400">Current Period</span>
         </div>
         <div className="flex items-center">
-          <div className="w-3 h-3 bg-indigo-400 rounded-full mr-2"></div>
-          <span className="text-gray-400">Previous Period</span>
+          <div className="w-3 h-3 bg-indigo-500 rounded-full mr-2"></div>
+          <span className="text-slate-400">Previous Period</span>
         </div>
       </div>
     </div>

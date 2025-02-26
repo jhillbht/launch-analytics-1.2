@@ -33,7 +33,7 @@ export function LandingPagesTable({ pages }: { pages: LandingPage[] }) {
   });
 
   const SortIcon = ({ field }: { field: SortField }) => (
-    <span className="ml-1 inline-block text-gray-600">
+    <span className="ml-1 inline-block text-slate-600">
       {field === sortField ? (
         sortDirection === 'asc' ? '↑' : '↓'
       ) : '↕'}
@@ -41,29 +41,29 @@ export function LandingPagesTable({ pages }: { pages: LandingPage[] }) {
   );
 
   return (
-    <div className="bg-navy-900 rounded-lg p-6">
-      <h2 className="text-[28px] font-light text-white mb-8">Landing Pages Performance</h2>
+    <div className="bg-navy-800/50 rounded-xl border border-slate-700/30 p-6">
+      <h2 className="text-2xl font-semibold text-white mb-8">Landing Pages Performance</h2>
       
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead>
-            <tr className="text-[13px] tracking-wider text-gray-400 text-left border-b border-gray-800">
-              <th className="pb-4 font-medium cursor-pointer hover:text-gray-300" onClick={() => handleSort('url')}>
+            <tr className="text-sm tracking-wider text-slate-400 text-left border-b border-slate-700/30">
+              <th className="pb-4 font-medium cursor-pointer hover:text-slate-300" onClick={() => handleSort('url')}>
                 PAGE URL <SortIcon field="url" />
               </th>
-              <th className="pb-4 font-medium cursor-pointer hover:text-gray-300" onClick={() => handleSort('revenue')}>
+              <th className="pb-4 font-medium cursor-pointer hover:text-slate-300" onClick={() => handleSort('revenue')}>
                 REVENUE <SortIcon field="revenue" />
               </th>
-              <th className="pb-4 font-medium cursor-pointer hover:text-gray-300" onClick={() => handleSort('cvr')}>
+              <th className="pb-4 font-medium cursor-pointer hover:text-slate-300" onClick={() => handleSort('cvr')}>
                 CVR <SortIcon field="cvr" />
               </th>
-              <th className="pb-4 font-medium cursor-pointer hover:text-gray-300" onClick={() => handleSort('keyEvents')}>
+              <th className="pb-4 font-medium cursor-pointer hover:text-slate-300" onClick={() => handleSort('keyEvents')}>
                 KEY EVENTS <SortIcon field="keyEvents" />
               </th>
-              <th className="pb-4 font-medium cursor-pointer hover:text-gray-300" onClick={() => handleSort('bounce')}>
+              <th className="pb-4 font-medium cursor-pointer hover:text-slate-300" onClick={() => handleSort('bounce')}>
                 BOUNCE <SortIcon field="bounce" />
               </th>
-              <th className="pb-4 font-medium cursor-pointer hover:text-gray-300" onClick={() => handleSort('sessions')}>
+              <th className="pb-4 font-medium cursor-pointer hover:text-slate-300" onClick={() => handleSort('sessions')}>
                 SESSIONS <SortIcon field="sessions" />
               </th>
             </tr>
@@ -72,35 +72,35 @@ export function LandingPagesTable({ pages }: { pages: LandingPage[] }) {
             {sortedPages.map((page, index) => (
               <tr 
                 key={index} 
-                className="border-b border-gray-800 hover:bg-navy-950/50 transition-colors duration-150"
+                className="border-b border-slate-700/30 hover:bg-navy-800/70 transition-colors duration-150"
               >
                 <td className="py-4">
-                  <span className="text-[14px] text-blue-400 hover:text-blue-300 cursor-pointer font-light">
+                  <span className="text-blue-400 hover:text-blue-300 cursor-pointer">
                     {page.url}
                   </span>
                 </td>
                 <td className="py-4">
-                  <span className="text-[14px] text-green-400 font-light">
+                  <span className="text-emerald-500">
                     {page.revenue > 0 ? `$${page.revenue.toLocaleString()}` : '-'}
                   </span>
                 </td>
                 <td className="py-4">
-                  <span className="text-[14px] text-gray-300 font-light">
+                  <span className="text-slate-300">
                     {page.cvr}%
                   </span>
                 </td>
                 <td className="py-4">
-                  <span className="text-[14px] text-gray-300 font-light">
+                  <span className="text-slate-300">
                     {page.keyEvents.toLocaleString()}
                   </span>
                 </td>
                 <td className="py-4">
-                  <span className="text-[14px] text-gray-300 font-light">
+                  <span className="text-slate-300">
                     {page.bounce}%
                   </span>
                 </td>
                 <td className="py-4">
-                  <span className="text-[14px] text-gray-300 font-light">
+                  <span className="text-slate-300">
                     {page.sessions.toLocaleString()}
                   </span>
                 </td>

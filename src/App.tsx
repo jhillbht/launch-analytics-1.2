@@ -1,152 +1,177 @@
-import React, { useState } from 'react';
-import MetricCard from './components/MetricCard';
-import TimeChart from './components/TimeChart';
-import LandingPageTable from './components/LandingPageTable';
-import './styles/theme.css';
+import React, { useState, useCallback } from 'react';
+import { Header } from './components/Header';
+import { MetricCard } from './components/MetricCard';
+import { TimeSeriesChart } from './components/TimeSeriesChart';
+import { TrafficSourceCard } from './components/TrafficSourceCard';
+import { LandingPagesTable } from './components/LandingPagesTable';
+import { usePeriod } from './contexts/PeriodContext';
+import { useSource } from './contexts/SourceContext';
+import { useDataRefresh } from './hooks/useDataRefresh';
 
-// Sample data generation for the time series chart
-const generateTimeData = () => {
-  const now = new Date();
-  return Array.from({ length: 24 }, (_, i) => {
-    const hour = (now.getHours() - 23 + i + 24) % 24;
-    return {
-      time: `${hour}:00`,
-      current: Math.floor(Math.random() * 1000) + 500,
-      previous: Math.floor(Math.random() * 1000) + 500,
-    };
-  });
-};
+// Sample time series data
+const timeSeriesData = Array.from({ length: 24 }, (_, i) => ({
+  time: `${i}:00`,
+  current: Math.floor(Math.random() * 1000) + 400,
+  previous: Math.floor(Math.random() * 1000) + 400,
+}));
 
-// Sample data for our metrics and tables
-const timeData = generateTimeData();
-
-const landingPages = [
+// Sample landing pages data
+const landingPagesData = [
   {
     url: '/checkout/success',
-    revenue: 37587.6,
-    views: 2156,
-    entries: 464,
-    bounce: 31.7,
-    cvr: 4.5,
+    revenue: 47058,
+    cvr: 5.6,
+    keyEvents: 297539,
+    bounce: 18.5,
+    sessions: 3960
   },
   {
     url: '/products',
     revenue: 0,
-    views: 1229,
-    entries: 831,
-    bounce: 12.5,
-    cvr: 3.9,
+    cvr: 6.0,
+    keyEvents: 295181,
+    bounce: 14.8,
+    sessions: 2902
   },
   {
     url: '/product/details',
     revenue: 0,
-    views: 3308,
-    entries: 406,
-    bounce: 20.4,
-    cvr: 2.2,
+    cvr: 3.4,
+    keyEvents: 288612,
+    bounce: 39.5,
+    sessions: 3982
   },
   {
-    url: '/start',
+    url: '/cart',
     revenue: 0,
-    views: 2675,
-    entries: 915,
-    bounce: 16.8,
-    cvr: 1.7,
-  },
+    cvr: 2.7,
+    keyEvents: 277509,
+    bounce: 21.9,
+    sessions: 2928
+  }
 ];
 
-const metrics = [
-  {
-    title: 'Conversion Rate',
-    value: '3.8',
-    change: -9.9,
-    isPercentage: true,
-  },
-  {
-    title: 'Revenue',
-    value: '23848',
-    change: -14.1,
-    isMonetary: true,
-  },
-  {
-    title: 'Sessions',
-    value: '55681',
-    change: 8.9,
-  },
-  {
-    title: 'Engagement',
-    value: '30.3',
-    change: 3.4,
-    isPercentage: true,
-  },
-  {
-    title: 'Bounce Rate',
-    value: '31.7',
-    change: -1.3,
-    isPercentage: true,
-  },
-  {
-    title: 'Avg Order',
-    value: '148',
-    change: 8.3,
-    isMonetary: true,
-  },
-];
+function App() {
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const { period } = usePeriod();
+  const { source } = useSource();
 
-export default function App() {
-  // State for period and source filters
-  const [period] = useState('Today');
-  const [source] = useState('All Traffic');
+  const handleRefresh = useCallback(() => {
+    setIsRefreshing(true);
+    // Simulate data refresh
+    setTimeout(() => {
+      setIsRefreshing(false);
+    }, 1000);
+  }, []);
+
+  useDataRefresh(handleRefresh);
 
   return (
-    <div className="min-h-screen bg-[var(--color-background)] p-6">
-      <div className="max-w-[1400px] mx-auto">
-        {/* Header section */}
-        <div className="flex justify-between items-center mb-8">
-          <div>
-            <h1 className="text-2xl font-semibold mb-1">Launch Analytics 🚀</h1>
-            <p className="text-[var(--color-text-secondary)]">Track your key metrics and performance</p>
-          </div>
-          <div className="flex gap-4">
-            <div className="metric-card px-4 py-2">
-              <span className="text-sm text-[var(--color-text-secondary)]">Period: </span>
-              <span className="font-medium">{period}</span>
-            </div>
-            <div className="metric-card px-4 py-2">
-              <span className="text-sm text-[var(--color-text-secondary)]">Source: </span>
-              <span className="font-medium">{source}</span>
-            </div>
-          </div>
-        </div>
-
+    <div className="min-h-screen bg-navy-900">
+      <Header onRefresh={handleRefresh} isRefreshing={isRefreshing} />
+      
+      <main className="container mx-auto px-6 py-8">
         {/* Metrics Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
-          {metrics.map((metric, index) => (
-            <MetricCard
-              key={index}
-              title={metric.title}
-              value={metric.value}
-              change={metric.change}
-              isMonetary={metric.isMonetary}
-              isPercentage={metric.isPercentage}
-            />
-          ))}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 mb-8">
+          <MetricCard
+            title="Conversion Rate"
+            value="2.9%"
+            change={{ value: "-2.2%", isPositive: false }}
+            subtitle="vs Yesterday"
+          />
+          <MetricCard
+            title="Revenue"
+            value="$44,380"
+            change={{ value: "+10.7%", isPositive: true }}
+            subtitle="vs Yesterday"
+          />
+          <MetricCard
+            title="Sessions"
+            value="63,657"
+            change={{ value: "-9.5%", isPositive: false }}
+            subtitle="vs Yesterday"
+          />
+          <MetricCard
+            title="Engagement"
+            value="41.7%"
+            change={{ value: "-4.2%", isPositive: false }}
+            subtitle="vs Yesterday"
+          />
+          <MetricCard
+            title="Bounce Rate"
+            value="20.7%"
+            change={{ value: "+3.1%", isPositive: true }}
+            subtitle="vs Yesterday"
+          />
+          <MetricCard
+            title="Avg Order"
+            value="$140"
+            change={{ value: "+1.8%", isPositive: true }}
+            subtitle="vs Yesterday"
+          />
         </div>
 
         {/* Time Series Chart */}
         <div className="mb-8">
-          <TimeChart
-            data={timeData}
-            title="Traffic Overview"
-            subtitle="Click on metrics to filter the chart"
-          />
+          <TimeSeriesChart data={timeSeriesData} />
+        </div>
+
+        {/* Traffic Sources Grid */}
+        <div className="mb-8">
+          <h2 className="text-2xl font-semibold text-white mb-6">CVR by Traffic Source</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <TrafficSourceCard
+              source="Retargeting"
+              cvr="3.9"
+              revenue="31,518"
+              sessions="17,914"
+              trend={-10.5}
+              isTopPerformer={true}
+              isHighestRevenue={true}
+            />
+            <TrafficSourceCard
+              source="Organic Search"
+              cvr="2.6"
+              revenue="21,828"
+              sessions="2,691"
+              trend={-8.7}
+            />
+            <TrafficSourceCard
+              source="Email"
+              cvr="3.6"
+              revenue="13,579"
+              sessions="4,631"
+              trend={13.2}
+            />
+            <TrafficSourceCard
+              source="Organic Social"
+              cvr="2.6"
+              revenue="12,979"
+              sessions="1,328"
+              trend={10.9}
+            />
+            <TrafficSourceCard
+              source="Paid Search"
+              cvr="2.4"
+              revenue="5,546"
+              sessions="2,825"
+              trend={-5.9}
+            />
+            <TrafficSourceCard
+              source="Paid Social"
+              cvr="2.1"
+              revenue="11,543"
+              sessions="4,283"
+              trend={7.1}
+            />
+          </div>
         </div>
 
         {/* Landing Pages Table */}
-        <div>
-          <LandingPageTable data={landingPages} />
-        </div>
-      </div>
+        <LandingPagesTable pages={landingPagesData} />
+      </main>
     </div>
   );
 }
+
+export default App;

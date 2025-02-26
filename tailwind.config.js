@@ -5,9 +5,14 @@ export default {
     extend: {
       colors: {
         navy: {
-          900: '#1a1f2b',
-          950: '#151821',
+          800: '#1E293B',
+          900: '#0F172A',
+          950: '#020617',
         },
+        slate: {
+          700: '#334155',
+          800: '#1E293B',
+        }
       },
       animation: {
         'pulse-subtle': 'pulse-subtle 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',

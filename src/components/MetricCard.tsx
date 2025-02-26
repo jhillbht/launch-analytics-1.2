@@ -1,46 +1,34 @@
-import React from 'react';
-import { ArrowUp, ArrowDown } from 'lucide-react';
-
 interface MetricCardProps {
   title: string;
   value: string;
-  change: number;
-  period?: string;
-  isMonetary?: boolean;
-  isPercentage?: boolean;
+  change: {
+    value: string;
+    isPositive: boolean;
+  };
+  subtitle?: string;
 }
 
-export default function MetricCard({
-  title,
-  value,
-  change,
-  period = 'vs Yesterday',
-  isMonetary = false,
-  isPercentage = false,
-}: MetricCardProps) {
-  const formattedValue = isMonetary ? `$${value}` : isPercentage ? `${value}%` : value;
-  const isPositive = change > 0;
-  const changeText = `${isPositive ? '+' : ''}${change}%`;
-
+export function MetricCard({ title, value, change, subtitle }: MetricCardProps) {
   return (
-    <div className="metric-card">
-      <div className="flex justify-between items-start mb-4">
-        <h3 className="text-sm font-medium text-[var(--color-text-secondary)]">
-          {title}
-        </h3>
+    <div className="bg-navy-800/50 p-6 rounded-xl border border-slate-700/30 transition-all duration-300 hover:bg-navy-800/70">
+      <div className="flex justify-between items-start mb-3">
+        <span className="text-slate-400 text-sm font-medium">{title}</span>
+        <span className={`text-sm font-medium ${
+          change.isPositive 
+            ? 'text-emerald-500' 
+            : 'text-rose-500'
+        }`}>
+          {change.value}
+        </span>
       </div>
-      <div className="flex flex-col">
-        <span className="text-2xl font-bold mb-2">{formattedValue}</span>
-        <div className="flex items-center">
-          <span className={`flex items-center ${isPositive ? 'text-[var(--color-success)]' : 'text-[var(--color-error)]'}`}>
-            {isPositive ? <ArrowUp size={16} /> : <ArrowDown size={16} />}
-            {changeText}
-          </span>
-          <span className="ml-2 text-sm text-[var(--color-text-secondary)]">
-            {period}
-          </span>
+      <div className="text-3xl font-semibold text-white mb-1">
+        {value}
+      </div>
+      {subtitle && (
+        <div className="text-sm text-slate-500">
+          {subtitle}
         </div>
-      </div>
+      )}
     </div>
   );
 }

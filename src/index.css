@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body {
-  @apply bg-navy-950 text-white;
+  @apply bg-navy-900 text-white;
 }
 
 /* Custom scrollbar */
@@ -13,13 +13,13 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-navy-950;
+  @apply bg-navy-900;
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-gray-700 rounded;
+  @apply bg-slate-700 rounded;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  @apply bg-gray-600;
+  @apply bg-slate-600;
 }
