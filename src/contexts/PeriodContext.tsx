@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, ReactNode } from 'react';
 
-type Period = 'today' | 'yesterday' | '7days' | '30days';
+export type Period = 'today' | 'yesterday' | '7days' | '30days';
 
 interface PeriodContextType {
   period: Period;

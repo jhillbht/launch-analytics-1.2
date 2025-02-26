@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, ReactNode } from 'react';
 
-type Source = 'all' | 'retargeting' | 'email' | 'paid-social' | 'organic-social' | 'paid-search' | 'organic-search';
+export type Source = 'all' | 'retargeting' | 'email' | 'paid-social' | 'organic-social' | 'paid-search' | 'organic-search';
 
 interface SourceContextType {
   source: Source;
